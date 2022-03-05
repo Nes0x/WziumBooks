@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" th:href="@{/wzium.png}">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
+    <title>WziumBooks | Dodaj autora</title>
+    <style>
+        .Bd {
+            border: solid 1px black;
+        }
+
+        .P\(0\) {
+            padding: 0;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .P\(10px\) {
+            padding: 10px;
+            margin: 20px;
+        }
+
+        .fix-form {
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WziumBooks - Recenzje książek!</h1>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Strona główna</a>
+                </li>
+                <li>
+                    <a href="/books">Wszystkie książki</a>
+                </li>
+                <li>
+                    <a href="/books/add">Dodaj książkę</a>
+                </li>
+            </ul>
+
+            <form class="fix-form" action="/books" method="get">
+                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+                <button type="submit">Szukaj</button>
+            </form>
+        </nav>
+    </header>
+    <main>
+        <h1 th:if="${message != null}" th:text="${message}"></h1>
+
+
+        <fieldset>
+            <legend>Nowy autor</legend>
+            <form action="#" th:action="@{/authors/add}" method="post" th:object="${author}" >
+                <p class="C(red)" th:if="${#fields.hasErrors('all')}" th:errors="*{all}"></p>
+                <label>Imię
+                    <input type="text" th:field="*{name}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <label>Nazwisko
+                    <input type="text" th:field="*{surname}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <label>Data urodzenia
+                    <input name="date" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}">
+                </label>
+                <p>
+                    <button type="submit" >Stwórz</button>
+                    <button type="reset">Wyczyść</button>
+                </p>
+            </form>
+        </fieldset>
+    </main>
+</body>
+</html>

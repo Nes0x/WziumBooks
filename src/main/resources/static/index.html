@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WziumBooks | Strona główna</title>
+    <link rel="shortcut icon" type="image/png" href="wzium.png">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
+    <style>
+        .fix-form {
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WziumBooks - Recenzje książek!</h1>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Strona główna</a>
+                </li>
+                <li>
+                    <a href="/books">Wszystkie książki</a>
+                </li>
+                <li>
+                    <a href="/books/add">Dodaj książkę</a>
+                </li>
+            </ul>
+
+            <form class="fix-form" action="/books" method="get">
+                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+                <button type="submit">Szukaj</button>
+            </form>
+        </nav>
+    </header>
+</body>
+</html>

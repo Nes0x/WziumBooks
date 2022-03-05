@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/wzium.png}" type="image/png">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
+    <title>WziumBooks | Dodaj książke</title>
+    <style>
+        .Bd {
+            border: solid 1px black;
+        }
+
+        .P\(0\) {
+            padding: 0;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .M\(10px\) {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .P\(10px\) {
+            padding: 10px;
+            margin: 20px;
+        }
+
+        .fix-form {
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WziumBooks - Recenzje książek!</h1>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Strona główna</a>
+                </li>
+                <li>
+                    <a href="/books">Wszystkie książki</a>
+                </li>
+                <li>
+                    <a href="/books/add">Dodaj książkę</a>
+                </li>
+            </ul>
+
+            <form class="fix-form" action="/books" method="get">
+                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+                <button type="submit">Szukaj</button>
+            </form>
+        </nav>
+    </header>
+    <main>
+        <h1 th:if="${message != null}" th:text="${message}"></h1>
+
+
+        <fieldset>
+            <legend>Nowa książka</legend>
+            <form action="#" th:action="@{/books/add}" method="post" th:object="${book}" >
+                <p class="C(red)" th:if="${ #fields.hasErrors('all')}" th:errors="*{all}"></p>
+                <label>Tytuł
+                    <input type="text" th:field="*{title}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <label>Opis
+                    <input type="text" th:field="*{description}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <label>Zdjęcie okładki (url)
+                    <input type="text" th:field="*{image}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <label>Gwiazdki
+                    <input type="number"  th:field="*{stars}" max="5" min="1" />
+                </label>
+                <label th:if="${author != null}">Autor
+                    <input name="author" type="text" disabled th:field="${author.name}" th:errorclass="'Bdc(red)'" />
+                </label>
+                <input th:if="${author} != null" type="hidden" name="author" th:value="${author.id}" />
+                <p>
+                    <button type="submit" >Stwórz</button>
+                    <button type="reset">Wyczyść</button>
+                    <button name="deleteAuthor" type="submit">Usuń autora</button>
+                </p>
+                <input type="text" name="name" placeholder="Szukaj autora po imieniu...">
+                <button name="searchAuthor" type="submit">Szukaj</button>
+                <div th:if="${authors != null && !authors.isEmpty()}">
+                    <h1 class="M(10px)">Wybierz autora</h1>
+                    <dl th:each="author : ${authors}" class="Bd P(10px)">
+                        <dt>
+                            <a th:href="@{/authors/{id}(id=${author.id})}">
+                                <p th:text="|Imie: ${author.name}|"></p>
+                                <p th:text="|Nazwisko: ${author.surname}|"></p>
+                            </a>
+                            <p>
+                                <button name="addAuthor" type="submit" th:value="${author.id}">Kliknij by wybrać</button>
+                            </p>
+                        </dt>
+                    </dl>
+                </div>
+            </form>
+            <form action="#" th:action="@{/authors/add}" method="get">
+                <button type="submit">Stwórz autora</button>
+            </form>
+        </fieldset>
+    </main>
+</body>
+</html>

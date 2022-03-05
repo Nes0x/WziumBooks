@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" th:href="@{/wzium.png}">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
+    <title th:text="'WziumBooks | ' + ${book.title}"></title>
+    <style>
+        .Bd {
+            border: solid 1px black;
+        }
+
+        .P\(0\) {
+            padding: 0;
+            margin: 0;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .P\(10px\) {
+            padding: 10px;
+            margin: 20px;
+        }
+
+        .P\(9px\) {
+            padding: 9px;
+        }
+
+        .M\(10px\) {
+            margin-top: 10px;
+        }
+
+
+        #leftImage {
+            float: left;
+            width: 130px;
+            height: auto;
+
+        }
+
+        .fix-form {
+            display: inline-flex;
+            float: left;
+        }
+
+        .fix-form-special {
+            float: left;
+        }
+
+
+        .stars {
+            display: inline-block;
+        }
+
+        .comment {
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WziumBooks - Recenzje książek!</h1>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Strona główna</a>
+                </li>
+                <li>
+                    <a href="/books">Wszystkie książki</a>
+                </li>
+                <li>
+                    <a href="/books/add">Dodaj książkę</a>
+                </li>
+            </ul>
+
+            <form class="fix-form" action="/books" method="get">
+                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+                <button type="submit">Szukaj</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <h1 th:if="${message != null}" th:text="${message}"></h1>
+        <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __*{stars}__}">
+            <h3>Okładka</h3><br>
+            <img id="leftImage" th:src="*{image}" alt="okładka"><br>
+            <h3>Tytuł</h3>
+            <p th:text="*{title}"></p>
+            <h3>Opis</h3>
+            <p th:text="*{description}"></p>
+            <h3>Gwiazdki </h3>
+            <div th:each="i : ${#numbers.sequence(1, __*{stars}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
+            </div>
+            <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
+            </div>
+
+
+            <div th:if="${book.author} != null">
+                <h3>Autor</h3>
+                <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
+            </div>
+        </fieldset>
+
+
+
+    </main>
+
+
+    <footer>
+        <h1>Napisz komentarz</h1>
+
+        <fieldset th:object="${comment}">
+            <form class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
+                <label>Tytuł
+                    <input type="text" th:field="*{title}"/>
+                </label>
+                <br>
+                <label>Treść
+                    <input type="text" th:field="*{content}" />
+                </label>
+                <button type="submit">Dodaj</button>
+            </form>
+        </fieldset>
+
+        <br>
+        <br>
+
+        <div th:if="${comments.size != 0}">
+            <h1>Komentarze</h1>
+            <br>
+            <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)">
+                <h1 th:text="${comment.title}"></h1>
+                <p th:text="${comment.content}"></p>
+            </div>
+        </div>
+
+
+    </footer>
+
+</body>
+</html>

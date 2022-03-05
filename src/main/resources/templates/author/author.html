@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" th:href="@{wzium.png}">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
+    <title th:if="${author} != null" th:text="|WziumBooks Autor ${author.name}|">WziumBooks | Nie znaleziono</title>
+    <style>
+        .Bd {
+            border: solid 1px black;
+        }
+
+        .P\(0\) {
+            padding: 0;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .P\(10px\) {
+            padding: 10px;
+            margin: 20px;
+        }
+
+        #leftImage {
+            float: left;
+            width: 130px;
+            height: auto;
+
+        }
+
+        .fix-form {
+            display: inline-flex;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WziumBooks - Recenzje książek!</h1>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Strona główna</a>
+                </li>
+                <li>
+                    <a href="/books">Wszystkie książki</a>
+                </li>
+                <li>
+                    <a href="/books/add">Dodaj książkę</a>
+                </li>
+            </ul>
+
+            <form class="fix-form" action="/books" method="get">
+                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+                <button type="submit">Szukaj</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <h1 th:if="${message != null}" th:text="${message}"></h1>
+        <fieldset th:if="${author} != null" th:object="${author}">
+            <h3>Imię</h3>
+            <p th:text="*{name}"></p>
+            <h3>Nazwisko</h3>
+            <p th:text="*{surname}"></p>
+
+            <div th:if="${author.date} != null">
+                <h3 >Data urodzenia</h3>
+                <p th:text="*{date}"></p>
+            </div>
+
+
+            <div th:if="${!author.books.isEmpty()}" >
+                <h3>Książki</h3>
+                <dl th:each="book : *{books}" class="Bd P(10px)">
+                    <dt>
+                        <a th:href="@{/books/{id}(id=${book.id})}">
+                            <p th:text="|${book.title}|"></p>
+                        </a>
+                    </dt>
+                </dl>
+            </div>
+
+
+        </fieldset>
+
+<!--        tutaj ma byc sekcja z recenzjami-->
+<!--        <fieldset th:if="${book} != null" th:object="${book}">-->
+<!--            <h3>Okładka</h3><br>-->
+<!--            <img id="leftImage" th:src="*{image}" alt="okładka"><br>-->
+<!--            <h3>Tytuł</h3>-->
+<!--            <p th:text="*{title}"></p>-->
+<!--            <h3>Opis</h3>-->
+<!--            <p th:text="*{description}"></p>-->
+<!--            <h3>Autor</h3>-->
+<!--            <a href="#">Test</a>-->
+<!--            <h3>Tutaj gwiazdki maja byc</h3>-->
+
+<!--        </fieldset>-->
+    </main>
+</body>
+</html>
