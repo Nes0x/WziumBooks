@@ -1,5 +1,11 @@
 spring:
   h2.console:
     enabled: false
+  datasource:
+    url: 'jdbc:postgresql://ec2-52-31-219-113.eu-west-1.compute.amazonaws.com:5432/deaar3m8bs9qjs'
+    username: 'gavppiozgwwpxd'
+    password: 'fb3692db7a2c457750539e74d70d88881f0371fcfbb3255cf5c9c64d2421d57a'
+  flyway:
+    baseline-on-migrate: true
 
 

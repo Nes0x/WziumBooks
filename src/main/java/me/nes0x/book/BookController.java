@@ -59,6 +59,7 @@ class BookController {
             model.addAttribute("book", book);
         } catch (NoSuchElementException exception) {
             model.addAttribute("message", "Książka z id " + id + " nie istnieje!");
+            model.addAttribute("title", true);
         }
 
         return "book/book";

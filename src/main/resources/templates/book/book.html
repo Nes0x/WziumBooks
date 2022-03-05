@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/png" th:href="@{/wzium.png}">
     <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
     <title th:if="${book} != null" th:text="'WziumBooks | ' + ${book.title}"></title>
+    <title th:if="${title} != null">WziumBooks | Nie znaleziono</title>
     <style>
         .Bd {
             border: solid 1px black;
@@ -120,7 +121,7 @@
     </main>
 
 
-    <footer>
+    <footer th:if="${book} != null">
         <h1>Napisz komentarz</h1>
 
         <fieldset th:object="${comment}">

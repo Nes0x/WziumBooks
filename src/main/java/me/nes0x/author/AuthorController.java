@@ -36,6 +36,7 @@ class AuthorController {
             model.addAttribute("author", author);
         } catch (NoSuchElementException exception) {
             model.addAttribute("message", "Autor z id " + id + " nie istnieje!");
+            model.addAttribute("title", true);
         }
 
         return "author/author";
