@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" th:href="@{/wzium.png}">
     <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
-    <title th:if="${author} != null" th:text="|WziumBooks Autor ${author.name}|">WziumBooks | Nie znaleziono</title>
+    <title th:if="${author} != null" th:text="'WziumBooks | ' + ${author.name}"></title>
     <style>
         .Bd {
             border: solid 1px black;
