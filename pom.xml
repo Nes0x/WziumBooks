@@ -10,7 +10,7 @@
     </parent>
     <groupId>me.nes0x</groupId>
     <artifactId>WziumBook</artifactId>
-    <version>0.2.0</version>
+    <version>1.0</version>
     <name>WziumBooks</name>
     <description>WziumBooks - Books reviews</description>
     <properties>
@@ -38,11 +38,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
