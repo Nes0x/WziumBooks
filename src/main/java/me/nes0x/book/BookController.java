@@ -109,10 +109,13 @@ class BookController {
         }
 
 
-        if (!file.getOriginalFilename().endsWith(".pdf") && !file.isEmpty()) {
-            model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
-            return "book/book_add";
+        if (!file.isEmpty()) {
+            if (!file.getOriginalFilename().endsWith(".pdf")) {
+                model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
+                return "book/book_add";
+            }
         }
+
 
 
         service.save(current, Integer.parseInt(id), file);
