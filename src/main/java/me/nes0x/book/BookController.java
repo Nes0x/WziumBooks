@@ -101,18 +101,18 @@ class BookController {
             return "book/book_add";
         }
 
-//        try {
-//            new URL(current.getImage());
-//        } catch (MalformedURLException exception) {
-//            model.addAttribute("message", "Nie podałeś linku do okładki!");
-//            return "book/book_add";
-//        }
-//
-//
-//        if (!file.getOriginalFilename().endsWith(".pdf") && !file.isEmpty()) {
-//            model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
-//            return "book/book_add";
-//        }
+        try {
+            new URL(current.getImage());
+        } catch (MalformedURLException exception) {
+            model.addAttribute("message", "Nie podałeś linku do okładki!");
+            return "book/book_add";
+        }
+
+
+        if (!file.getOriginalFilename().endsWith(".pdf") && !file.isEmpty()) {
+            model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
+            return "book/book_add";
+        }
 
 
         service.save(current, Integer.parseInt(id), file);
