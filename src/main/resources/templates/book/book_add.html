@@ -68,7 +68,7 @@
 
         <fieldset>
             <legend>Nowa książka</legend>
-            <form action="#" th:action="@{/books/add}" method="post" th:object="${book}" >
+            <form action="#" th:action="@{/books/add}" method="post" th:object="${book}" enctype="multipart/form-data">
                 <p class="C(red)" th:if="${ #fields.hasErrors('all')}" th:errors="*{all}"></p>
                 <label>Tytuł
                     <input type="text" th:field="*{title}" th:errorclass="'Bdc(red)'" />
@@ -82,6 +82,9 @@
                 <label>Gwiazdki
                     <input type="number"  th:field="*{stars}" max="5" min="1" />
                 </label>
+                <label >Książka
+                    <input name="file" type="file">
+                </label>
                 <label th:if="${author != null}">Autor
                     <input name="author" type="text" disabled th:field="${author.name}" th:errorclass="'Bdc(red)'" />
                 </label>
@@ -89,7 +92,7 @@
                 <p>
                     <button type="submit" >Stwórz</button>
                     <button type="reset">Wyczyść</button>
-                    <button name="deleteAuthor" type="submit">Usuń autora</button>
+                    <button th:if="${author} != null" name="deleteAuthor" type="submit">Usuń autora</button>
                 </p>
                 <input type="text" name="name" placeholder="Szukaj autora po imieniu...">
                 <button name="searchAuthor" type="submit">Szukaj</button>

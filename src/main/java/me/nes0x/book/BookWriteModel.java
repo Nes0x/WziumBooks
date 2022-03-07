@@ -17,6 +17,7 @@ public class BookWriteModel {
     private String image;
     private int stars;
     private Author author;
+    private byte[] data;
 
      public String getTitle() {
         return title;
@@ -58,7 +59,15 @@ public class BookWriteModel {
         this.stars = stars;
     }
 
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(final byte[] data) {
+        this.data = data;
+    }
+
     public Book toBook() {
-        return new Book(title, description, image, author, stars);
+        return new Book(title, description, image, author, stars, data);
     }
 }

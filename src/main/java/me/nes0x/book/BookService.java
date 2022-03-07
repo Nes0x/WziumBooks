@@ -4,7 +4,9 @@ import me.nes0x.author.AuthorRepository;
 import me.nes0x.comment.Comment;
 import me.nes0x.comment.CommentReadModel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,15 +20,12 @@ public class BookService {
         this.authorRepository = authorRepository;
     }
 
-
-//    public Book save(BookWriteModel book, int id) {
-//        authorRepository.findById(id).ifPresent(book::setAuthor);
-//
-//        return repository.save(book.toBook());
-//    }
-
-    public BookReadModel save(BookWriteModel book, int id) {
+    public BookReadModel save(BookWriteModel book, int id, MultipartFile file) throws IOException {
         authorRepository.findById(id).ifPresent(book::setAuthor);
+        if (file != null) {
+            book.setData(file.getBytes());
+        }
+
         Book result = repository.save(book.toBook());
         return new BookReadModel(result);
     }

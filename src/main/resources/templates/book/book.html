@@ -114,6 +114,10 @@
                 <h3>Autor</h3>
                 <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
             </div>
+            <br>
+            <br>
+            <a th:href="@{{id}/download(id=*{id})}" th:if="${book.data} != null">Kliknij by pobrać</a>
+
         </fieldset>
 
 

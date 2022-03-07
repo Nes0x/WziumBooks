@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### My
+wzium_books.mv.db
+wzium_books.trace.db
+

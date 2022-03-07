@@ -28,16 +28,19 @@ public class Book {
     private Author author;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "book")
     private Set<Comment> comments;
+    @Lob
+    private byte[] data;
 
     Book() {
     }
 
-    Book(String title, String description, String image, Author author, int stars) {
+    Book(String title, String description, String image, Author author, int stars, byte[] data) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.author = author;
         this.stars = stars;
+        this.data = data;
     }
 
 
@@ -95,5 +98,13 @@ public class Book {
 
     void setComments(final Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    byte[] getData() {
+        return data;
+    }
+
+    void setData(final byte[] data) {
+        this.data = data;
     }
 }

@@ -4,14 +4,19 @@ import me.nes0x.author.AuthorReadModel;
 import me.nes0x.author.AuthorService;
 import me.nes0x.comment.CommentService;
 import me.nes0x.comment.CommentWriteModel;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/books")
@@ -66,6 +71,16 @@ class BookController {
     }
 
 
+    @GetMapping("/{id}/download")
+    ResponseEntity<byte[]> downloadBook(@PathVariable int id) {
+        BookReadModel book = service.getBookById(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + book.getTitle() + ".pdf\"")
+                .body(book.getData());
+    }
+
+
+
     @GetMapping("/add")
     String showAddBookForm(Model model) {
         model.addAttribute("book", new BookWriteModel());
@@ -73,19 +88,22 @@ class BookController {
     }
 
     @PostMapping("/add")
-    String createBook(Model model, @ModelAttribute("book") @Valid BookWriteModel current, BindingResult bindingResult, @RequestParam(name = "addAuthor", defaultValue = "-1") String id) {
+    String createBook(Model model, @ModelAttribute("book") @Valid BookWriteModel current, BindingResult bindingResult, @RequestParam(name = "addAuthor", defaultValue = "-1") String id, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message" ,"Wystąpił błąd!");
             try {
                 AuthorReadModel author = authorService.getAuthorById(Integer.parseInt(id));
                 model.addAttribute("author", author);
-            } catch (NoSuchElementException | NumberFormatException exception) {
-                //
-            }
+            } catch (NoSuchElementException | NumberFormatException ignored) {}
             return "book/book_add";
         }
 
-        service.save(current, Integer.parseInt(id));
+        if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".pdf")) {
+            model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
+            return "book/book_add";
+        }
+
+        service.save(current, Integer.parseInt(id), file);
 
         model.addAttribute("message","Stworzono książke!");
         model.addAttribute("book", new BookWriteModel());

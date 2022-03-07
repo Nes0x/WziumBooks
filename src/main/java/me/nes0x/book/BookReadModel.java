@@ -9,6 +9,7 @@ public class BookReadModel {
     private String image;
     private int stars;
     private Author author;
+    private byte[] data;
 
     public BookReadModel(Book source) {
         id = source.getId();
@@ -17,6 +18,7 @@ public class BookReadModel {
         image = source.getImage();
         author = source.getAuthor();
         stars = source.getStars();
+        data = source.getData();
     }
 
     public String getTitle() {
@@ -65,5 +67,13 @@ public class BookReadModel {
 
     public void setStars(final int stars) {
         this.stars = stars;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(final byte[] data) {
+        this.data = data;
     }
 }
