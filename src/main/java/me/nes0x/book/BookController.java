@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -98,10 +101,19 @@ class BookController {
             return "book/book_add";
         }
 
-        if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".pdf")) {
+        try {
+            new URL(current.getImage());
+        } catch (MalformedURLException exception) {
+            model.addAttribute("message", "Nie podałeś linku do okładki!");
+            return "book/book_add";
+        }
+
+
+        if (!file.getOriginalFilename().endsWith(".pdf") && !file.isEmpty()) {
             model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
             return "book/book_add";
         }
+
 
         service.save(current, Integer.parseInt(id), file);
 

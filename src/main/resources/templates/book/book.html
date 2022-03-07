@@ -65,6 +65,10 @@
             text-align: left;
         }
 
+        .clear {
+            clear: both;
+        }
+
     </style>
 </head>
 <body>
@@ -96,27 +100,30 @@
         <h1 th:if="${message != null}" th:text="${message}"></h1>
         <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __*{stars}__}">
             <h3>Okładka</h3><br>
-            <img id="leftImage" th:src="*{image}" alt="okładka"><br>
-            <h3>Tytuł</h3>
-            <p th:text="*{title}"></p>
-            <h3>Opis</h3>
-            <p th:text="*{description}"></p>
-            <h3>Gwiazdki </h3>
-            <div th:each="i : ${#numbers.sequence(1, __*{stars}__, 1)}" class="stars">
-                <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
-            </div>
-            <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
-                <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
-            </div>
+            <img id="leftImage" th:src="*{image}" alt="okładka">
+            <div class="clear">
+                <h3>Tytuł</h3>
+                <p th:text="*{title}"></p>
+                <h3>Opis</h3>
+                <p th:text="*{description}"></p>
+                <h3>Gwiazdki </h3>
+                <div th:each="i : ${#numbers.sequence(1, __*{stars}__, 1)}" class="stars">
+                    <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
+                </div>
+                <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
+                    <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
+                </div>
 
 
-            <div th:if="${book.author} != null">
-                <h3>Autor</h3>
-                <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
+                <div th:if="${book.author} != null">
+                    <h3>Autor</h3>
+                    <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
+                </div>
+                <br>
+                <br>
+                <a th:href="@{{id}/download(id=*{id})}" th:if="${book.data} != null">Kliknij by pobrać</a>
             </div>
-            <br>
-            <br>
-            <a th:href="@{{id}/download(id=*{id})}" th:if="${book.data} != null">Kliknij by pobrać</a>
+
 
         </fieldset>
 
