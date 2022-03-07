@@ -1,1 +1,1 @@
-alter table books add column data blob null;
+alter table books add column data bytea null;
