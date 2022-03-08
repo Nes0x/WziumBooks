@@ -44,18 +44,14 @@ class BookController {
 
         if (title.equalsIgnoreCase("")) {
             books = service.getAllBooks();
-            if (books.isEmpty()) {
-                model.addAttribute("message", "Brak aktualnie dostępnych książek.");
-            } else {
-                model.addAttribute("books", books);
-            }
         } else {
             books = service.getBooksByTitle(title);
-            if (books.isEmpty()) {
-                model.addAttribute("message", "Brak znalezionych książek o tytule " + title + ".");
-            } else {
-                model.addAttribute("books", service.getBooksByTitle(title));
-            }
+        }
+
+        if (books.isEmpty()) {
+            model.addAttribute("message", "Brak aktualnie dostępnych książek.");
+        } else {
+            model.addAttribute("books", books);
         }
 
         return "book/books";
