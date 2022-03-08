@@ -24,7 +24,7 @@ class CommentController {
     @PostMapping("/add/{id}")
     String createComment(@PathVariable int id, @ModelAttribute("comment") @Valid CommentWriteModel current, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "redirect:/books/" + id;
+            return "redirect:/error";
         }
 
         service.save(current, id);

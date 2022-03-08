@@ -22,7 +22,7 @@ public class BookService {
 
     public BookReadModel save(BookWriteModel book, int id, MultipartFile file) throws IOException {
         authorRepository.findById(id).ifPresent(book::setAuthor);
-        if (file != null) {
+        if (!file.isEmpty()) {
             book.setData(file.getBytes());
         }
 

@@ -16,11 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/books")
@@ -35,6 +33,10 @@ class BookController {
         this.commentService = commentService;
     }
 
+    @ModelAttribute("authors")
+    List<AuthorReadModel> getAuthors() {
+        return authorService.getAllAuthors();
+    }
 
     @GetMapping
     String showAllBooks(Model model, @RequestParam(value = "title", defaultValue = "") String title) {
@@ -151,13 +153,5 @@ class BookController {
         }
         return "book/book_add";
     }
-
-
-    @ModelAttribute("authors")
-    List<AuthorReadModel> getAuthors() {
-        return authorService.getAllAuthors();
-    }
-
-
 
 }

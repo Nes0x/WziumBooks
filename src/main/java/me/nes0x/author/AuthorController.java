@@ -1,7 +1,6 @@
 package me.nes0x.author;
 
 
-import me.nes0x.book.BookReadModel;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -21,12 +19,6 @@ class AuthorController {
 
     AuthorController(final AuthorService service) {
         this.service = service;
-    }
-
-    @GetMapping("/add")
-    String showAddAuthorForm(Model model) {
-        model.addAttribute("author", new AuthorWriteModel());
-        return "author/author_add";
     }
 
     @GetMapping("/{id}")
@@ -40,6 +32,12 @@ class AuthorController {
         }
 
         return "author/author";
+    }
+
+    @GetMapping("/add")
+    String showAddAuthorForm(Model model) {
+        model.addAttribute("author", new AuthorWriteModel());
+        return "author/author_add";
     }
 
     @PostMapping("/add")
