@@ -5,6 +5,7 @@ import me.nes0x.author.AuthorService;
 import me.nes0x.comment.CommentService;
 import me.nes0x.comment.CommentWriteModel;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -110,7 +111,7 @@ class BookController {
 
 
         if (!file.isEmpty()) {
-            if (!file.getOriginalFilename().endsWith(".pdf")) {
+            if (!file.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
                 model.addAttribute("message", "Możesz dodawać tylko pliki .pdf");
                 return "book/book_add";
             }
