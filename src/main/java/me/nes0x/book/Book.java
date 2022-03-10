@@ -22,7 +22,6 @@ public class Book {
     private String description;
     @NotBlank(message = "Image must be not empty!")
     private String image;
-    private int stars;
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
@@ -34,12 +33,11 @@ public class Book {
     Book() {
     }
 
-    Book(String title, String description, String image, Author author, int stars, byte[] data) {
+    Book(String title, String description, String image, Author author, byte[] data) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.author = author;
-        this.stars = stars;
         this.data = data;
     }
 
@@ -82,14 +80,6 @@ public class Book {
 
     void setAuthor(final Author author) {
         this.author = author;
-    }
-
-    int getStars() {
-        return stars;
-    }
-
-    void setStars(final int stars) {
-        this.stars = stars;
     }
 
     Set<Comment> getComments() {

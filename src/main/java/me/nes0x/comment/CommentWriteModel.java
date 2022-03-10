@@ -10,6 +10,7 @@ public class CommentWriteModel {
     private String content;
     private Book book;
     private Author author;
+    private int stars;
 
      public String getContent() {
         return content;
@@ -35,7 +36,15 @@ public class CommentWriteModel {
         this.author = author;
     }
 
+    public int getStars() {
+        return stars;
+    }
+
+    public void setStars(final int stars) {
+        this.stars = stars;
+    }
+
     public Comment toComment() {
-        return new Comment(content, book, author);
+        return new Comment(content, book, author, stars);
     }
 }

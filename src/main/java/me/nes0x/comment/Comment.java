@@ -23,14 +23,16 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+    private int stars;
 
     Comment() {
     }
 
-    Comment(final String content, final Book book, final Author author) {
+    Comment(final String content, final Book book, final Author author, final int stars) {
         this.content = content;
         this.book = book;
         this.author = author;
+        this.stars = stars;
     }
 
     int getId() {
@@ -63,5 +65,13 @@ public class Comment {
 
     void setAuthor(final Author author) {
         this.author = author;
+    }
+
+    int getStars() {
+        return stars;
+    }
+
+    void setStars(final int stars) {
+        this.stars = stars;
     }
 }

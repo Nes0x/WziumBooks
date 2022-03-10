@@ -15,7 +15,6 @@ public class BookWriteModel {
     private String description;
     @NotBlank(message = "Image must be not empty!")
     private String image;
-    private int stars;
     private Author author;
     private byte[] data;
 
@@ -51,14 +50,6 @@ public class BookWriteModel {
         this.author = author;
     }
 
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(final int stars) {
-        this.stars = stars;
-    }
-
     public byte[] getData() {
         return data;
     }
@@ -68,6 +59,6 @@ public class BookWriteModel {
     }
 
     public Book toBook() {
-        return new Book(title, description, image, author, stars, data);
+        return new Book(title, description, image, author, data);
     }
 }

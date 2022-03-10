@@ -6,12 +6,14 @@ public class CommentReadModel {
     private int id;
     private String content;
     private Author author;
+    private int stars;
 
 
     public CommentReadModel(Comment source) {
         id = source.getId();
         content = source.getContent();
         author = source.getAuthor();
+        stars = source.getStars();
     }
 
     public String getContent() {
@@ -36,5 +38,13 @@ public class CommentReadModel {
 
     public void setId(final int id) {
         this.id = id;
+    }
+
+    public int getStars() {
+        return stars;
+    }
+
+    public void setStars(final int stars) {
+        this.stars = stars;
     }
 }

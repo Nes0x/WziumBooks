@@ -7,7 +7,6 @@ public class BookReadModel {
     private String title;
     private String description;
     private String image;
-    private int stars;
     private Author author;
     private byte[] data;
 
@@ -17,7 +16,6 @@ public class BookReadModel {
         description = source.getDescription();
         image = source.getImage();
         author = source.getAuthor();
-        stars = source.getStars();
         data = source.getData();
     }
 
@@ -59,14 +57,6 @@ public class BookReadModel {
 
     public void setAuthor(final Author author) {
         this.author = author;
-    }
-
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(final int stars) {
-        this.stars = stars;
     }
 
     public byte[] getData() {

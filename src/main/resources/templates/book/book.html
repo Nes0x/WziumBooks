@@ -117,7 +117,7 @@
 
     <main>
         <h1 th:if="${message != null}" th:text="${message}"></h1>
-        <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __*{stars}__}">
+        <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __${stars}__}">
             <h3>Okładka</h3><br>
             <img id="leftImage" th:src="*{image}" alt="okładka">
             <div class="clear">
@@ -126,7 +126,7 @@
                 <h3>Opis</h3>
                 <p th:text="*{description}"></p>
                 <h3>Gwiazdki </h3>
-                <div th:each="i : ${#numbers.sequence(1, __*{stars}__, 1)}" class="stars">
+                <div th:each="i : ${#numbers.sequence(1, __${stars}__, 1)}" class="stars">
                     <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
                 </div>
                 <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
@@ -144,14 +144,8 @@
                     <br>
                     <a th:href="@{{id}/download(id=*{id})}">Kliknij by pobrać</a>
                 </div>
-
-
             </div>
-
-
         </fieldset>
-
-
 
     </main>
 
@@ -159,10 +153,13 @@
     <footer th:if="${book} != null">
         <h1>Napisz komentarz</h1>
 
-        <fieldset th:object="${comment}">
-            <form class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
+        <fieldset>
+            <form th:object="${comment}" class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
                 <label>Treść
-                    <input type="text" th:field="*{content}" />
+                    <input required type="text" th:field="*{content}" />
+                </label>
+                <label>Ocena
+                    <input required type="number" min="1" max="5" th:field="*{stars}" />
                 </label>
                 <button type="submit">Dodaj</button>
             </form>
@@ -174,9 +171,15 @@
         <div th:if="${comments.size != 0}">
             <h1>Komentarze</h1>
             <br>
-            <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)">
+            <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)" th:with="result=${5 - __${comment.stars}__}">
                 <h1 th:text="${comment.author.name}"></h1>
                 <p th:text="${comment.content}"></p>
+                <div th:each="i : ${#numbers.sequence(1, __${comment.stars}__, 1)}" class="stars">
+                    <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
+                </div>
+                <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
+                    <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
+                </div>
                 <div sec:authorize="isAuthenticated()">
                     <div th:if="${comment.author.name == #authentication.name}">
                         <form class="fix-form-special" th:action="@{/comments/remove/{id}(id=${comment.id})}" method="post">

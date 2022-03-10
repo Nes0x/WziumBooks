@@ -1,6 +1,5 @@
 package me.nes0x.comment;
 
-import me.nes0x.book.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +24,7 @@ class CommentController {
         if (bindingResult.hasErrors()) {
             return "redirect:/error";
         }
+
 
         service.save(current, id, principal.getName());
         return "redirect:/books/" + id;

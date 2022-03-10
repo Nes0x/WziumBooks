@@ -3,6 +3,7 @@ package me.nes0x.book;
 import me.nes0x.author.Author;
 import me.nes0x.author.AuthorReadModel;
 import me.nes0x.author.AuthorService;
+import me.nes0x.comment.CommentReadModel;
 import me.nes0x.comment.CommentService;
 import me.nes0x.comment.CommentWriteModel;
 import me.nes0x.security.SecurityService;
@@ -70,9 +71,17 @@ class BookController {
     String showBook(@PathVariable int id, Model model) {
         try {
             BookReadModel book = service.getBookById(id);
-            model.addAttribute("comments", commentService.getAllCommentsOfIdBook(id));
+            List<CommentReadModel> comments = commentService.getAllCommentsOfIdBook(id);
+            model.addAttribute("comments", comments);
             model.addAttribute("comment", new CommentWriteModel());
             model.addAttribute("book", book);
+            float stars = 0f;
+
+            for (CommentReadModel comment : comments) {
+                stars += comment.getStars();
+            }
+
+            model.addAttribute("stars", Math.round(stars/comments.size()));
         } catch (NoSuchElementException exception) {
             model.addAttribute("message", "Książka z id " + id + " nie istnieje!");
             model.addAttribute("title", true);
