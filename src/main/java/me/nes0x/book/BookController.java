@@ -1,9 +1,11 @@
 package me.nes0x.book;
 
+import me.nes0x.author.Author;
 import me.nes0x.author.AuthorReadModel;
 import me.nes0x.author.AuthorService;
 import me.nes0x.comment.CommentService;
 import me.nes0x.comment.CommentWriteModel;
+import me.nes0x.security.SecurityService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,11 +31,15 @@ class BookController {
     private final BookService service;
     private final AuthorService authorService;
     private final CommentService commentService;
+    private final BookRepository bookRepository;
+    private final SecurityService securityService;
 
-    BookController(final BookService service, final AuthorService authorService, final CommentService commentService) {
+    BookController(final BookService service, final AuthorService authorService, final CommentService commentService, final BookRepository bookRepository, final SecurityService securityService) {
         this.service = service;
         this.authorService = authorService;
         this.commentService = commentService;
+        this.bookRepository = bookRepository;
+        this.securityService = securityService;
     }
 
     @ModelAttribute("authors")
@@ -90,13 +99,11 @@ class BookController {
     }
 
     @PostMapping("/add")
-    String createBook(Model model, @ModelAttribute("book") @Valid BookWriteModel current, BindingResult bindingResult, @RequestParam(name = "addAuthor", defaultValue = "-1") String id, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+    String createBook(Model model, @ModelAttribute("book") @Valid BookWriteModel current,
+                      BindingResult bindingResult, @RequestParam(value = "file", required = false) MultipartFile file,
+                      Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message" ,"Wystąpił błąd!");
-            try {
-                AuthorReadModel author = authorService.getAuthorById(Integer.parseInt(id));
-                model.addAttribute("author", author);
-            } catch (NoSuchElementException | NumberFormatException ignored) {}
             return "book/book_add";
         }
 
@@ -117,37 +124,30 @@ class BookController {
 
 
 
-        service.save(current, Integer.parseInt(id), file);
+        service.save(current, file, principal.getName());
 
         model.addAttribute("message","Stworzono książke!");
         model.addAttribute("book", new BookWriteModel());
         return "book/book_add";
     }
 
+    @PostMapping(path = "/{id}",  params = "deleteBook")
+    @Transactional
+    public String deleteBook(@PathVariable int id, Principal principal, Model model) {
 
-    @PostMapping(path = "/add", params = "deleteAuthor")
-    String deleteAuthor(Model model, @ModelAttribute("book") BookWriteModel current) {
-        model.addAttribute("author",null);
-        return "book/book_add";
-    }
-
-    @PostMapping(path = "/add", params = "searchAuthor")
-    String searchAuthor(Model model, @ModelAttribute("book") BookWriteModel current,  @RequestParam(name = "name", defaultValue = "") String name) {
-        model.addAttribute("authors", authorService.getAllAuthorsOfName(name));
-        return "book/book_add";
-    }
-
-    @PostMapping(path = "/add", params = "addAuthor")
-    String addAuthor(Model model, @ModelAttribute("book") BookWriteModel current,
-                     @RequestParam(name = "addAuthor", defaultValue = "-1") String id) {
-        try {
-            AuthorReadModel author = authorService.getAuthorById(Integer.parseInt(id));
-            model.addAttribute("author", author);
-            model.addAttribute("message", "Wybrałeś autora o id " + id);
-        } catch (NoSuchElementException | NumberFormatException exception) {
-            model.addAttribute("message", "Autor z " + id + " nie istnieje!");
+        if (!securityService.isAuthenticated()) {
+            return "redirect:/";
         }
-        return "book/book_add";
+
+        if (bookRepository.findByAuthor_Name(principal.getName()).contains(bookRepository.findById(id).get())) {
+            bookRepository.deleteById(id);
+            model.addAttribute("message", "Pomyślnie usunałeś swoją ksiażke!");
+        }
+
+
+        model.addAttribute("books", service.getBooksByAuthorName(principal.getName()));
+        return "security/dashboard";
     }
+
 
 }

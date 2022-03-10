@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,10 +54,26 @@
                 <li>
                     <a href="/authors">Autorzy</a>
                 </li>
-                <li>
+                <li sec:authorize="isAuthenticated()">
                     <a href="/books/add">Dodaj książkę</a>
                 </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/login">Zaloguj</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/registration">Zarejestruj</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/dashboard">Panel</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" onclick="document.forms['logoutForm'].submit()">Wyloguj się</a>
+                </li>
             </ul>
+
+            <form id="logoutForm" method="post" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
 
             <form class="fix-form" action="/books" method="get">
                 <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
@@ -88,34 +104,10 @@
                 <label >Książka
                     <input name="file" type="file">
                 </label>
-                <label th:if="${author != null}">Autor
-                    <input name="author" type="text" disabled th:field="${author.name}" th:errorclass="'Bdc(red)'" />
-                </label>
-                <input th:if="${author} != null" type="hidden" name="author" th:value="${author.id}" />
                 <p>
                     <button type="submit" >Stwórz</button>
                     <button type="reset">Wyczyść</button>
-                    <button th:if="${author} != null" name="deleteAuthor" type="submit">Usuń autora</button>
                 </p>
-                <input type="text" name="name" placeholder="Szukaj autora po imieniu...">
-                <button name="searchAuthor" type="submit">Szukaj</button>
-                <div th:if="${authors != null && !authors.isEmpty()}">
-                    <h1 class="M(10px)">Wybierz autora</h1>
-                    <dl th:each="author : ${authors}" class="Bd P(10px)">
-                        <dt>
-                            <a th:href="@{/authors/{id}(id=${author.id})}">
-                                <p th:text="|Imie: ${author.name}|"></p>
-                                <p th:text="|Nazwisko: ${author.surname}|"></p>
-                            </a>
-                            <p>
-                                <button name="addAuthor" type="submit" th:value="${author.id}">Kliknij by wybrać</button>
-                            </p>
-                        </dt>
-                    </dl>
-                </div>
-            </form>
-            <form action="#" th:action="@{/authors/add}" method="get">
-                <button type="submit">Stwórz autora</button>
             </form>
         </fieldset>
     </main>

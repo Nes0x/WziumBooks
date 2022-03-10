@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface AuthorRepository {
     Author save(Author source);
+    Author findByName(String name);
     List<Author> findAll();
     List<Author> findByNameContainsIgnoreCase(String name);
     Optional<Author> findById(Integer id);

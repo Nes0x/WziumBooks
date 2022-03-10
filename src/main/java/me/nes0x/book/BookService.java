@@ -20,8 +20,8 @@ public class BookService {
         this.authorRepository = authorRepository;
     }
 
-    public BookReadModel save(BookWriteModel book, int id, MultipartFile file) throws IOException {
-        authorRepository.findById(id).ifPresent(book::setAuthor);
+    public BookReadModel save(BookWriteModel book, MultipartFile file, String name) throws IOException {
+        book.setAuthor(authorRepository.findByName(name));
         if (!file.isEmpty()) {
             book.setData(file.getBytes());
         }
@@ -46,4 +46,12 @@ public class BookService {
                 .map(BookReadModel::new)
                 .collect(Collectors.toList());
     }
+
+    public List<BookReadModel> getBooksByAuthorName(final String name) {
+        return repository.findByAuthor_Name(name)
+                .stream()
+                .map(BookReadModel::new)
+                .collect(Collectors.toList());
+    }
+
 }

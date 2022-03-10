@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -87,10 +87,26 @@
                 <li>
                     <a href="/authors">Autorzy</a>
                 </li>
-                <li>
+                <li sec:authorize="isAuthenticated()">
                     <a href="/books/add">Dodaj książkę</a>
                 </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/login">Zaloguj</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/registration">Zarejestruj</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/dashboard">Panel</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" onclick="document.forms['logoutForm'].submit()">Wyloguj się</a>
+                </li>
             </ul>
+
+            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
 
             <form class="fix-form" action="/books" method="get">
                 <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
@@ -145,10 +161,6 @@
 
         <fieldset th:object="${comment}">
             <form class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
-                <label>Tytuł
-                    <input type="text" th:field="*{title}"/>
-                </label>
-                <br>
                 <label>Treść
                     <input type="text" th:field="*{content}" />
                 </label>
@@ -163,8 +175,16 @@
             <h1>Komentarze</h1>
             <br>
             <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)">
-                <h1 th:text="${comment.title}"></h1>
+                <h1 th:text="${comment.author.name}"></h1>
                 <p th:text="${comment.content}"></p>
+                <div sec:authorize="isAuthenticated()">
+                    <div th:if="${comment.author.name == #authentication.name}">
+                        <form class="fix-form-special" th:action="@{/comments/remove/{id}(id=${comment.id})}" method="post">
+                            <input type="hidden"  th:value="${book.id}" name="bookId" />
+                            <button type="submit">Usuń</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 

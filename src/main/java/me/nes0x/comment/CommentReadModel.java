@@ -1,23 +1,17 @@
 package me.nes0x.comment;
 
-import me.nes0x.book.Book;
+import me.nes0x.author.Author;
 
 public class CommentReadModel {
-    private String title;
+    private int id;
     private String content;
+    private Author author;
 
 
     public CommentReadModel(Comment source) {
-        title = source.getTitle();
+        id = source.getId();
         content = source.getContent();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
+        author = source.getAuthor();
     }
 
     public String getContent() {
@@ -28,4 +22,19 @@ public class CommentReadModel {
         this.content = content;
     }
 
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(final Author author) {
+        this.author = author;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
 }

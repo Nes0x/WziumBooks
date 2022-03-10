@@ -1,15 +1,12 @@
 package me.nes0x.comment;
 
-import me.nes0x.author.AuthorWriteModel;
+import me.nes0x.book.BookService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/comments")
@@ -22,13 +19,23 @@ class CommentController {
 
 
     @PostMapping("/add/{id}")
-    String createComment(@PathVariable int id, @ModelAttribute("comment") @Valid CommentWriteModel current, BindingResult bindingResult) {
+    String createComment(@PathVariable int id, @ModelAttribute("comment") @Valid CommentWriteModel current, BindingResult bindingResult,
+                         Principal principal) {
+
         if (bindingResult.hasErrors()) {
             return "redirect:/error";
         }
 
-        service.save(current, id);
+        service.save(current, id, principal.getName());
         return "redirect:/books/" + id;
+    }
+
+    @PostMapping("/remove/{id}")
+    String removeComment(@PathVariable int id, Principal principal, @RequestParam(value = "bookId", required = false) String bookId) {
+        if (service.checkComment(principal.getName(), id)) {
+            service.delete(id);
+        }
+        return "redirect:/books/" + bookId;
     }
 
 }

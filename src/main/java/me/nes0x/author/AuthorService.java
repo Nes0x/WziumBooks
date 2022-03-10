@@ -1,7 +1,7 @@
 package me.nes0x.author;
 
-import me.nes0x.comment.Comment;
-import me.nes0x.comment.CommentReadModel;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,15 +11,22 @@ import java.util.stream.Collectors;
 @Service
 public class AuthorService {
     private final AuthorRepository repository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    AuthorService(final AuthorRepository repository) {
+    AuthorService(final AuthorRepository repository, final BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.repository = repository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public AuthorReadModel save(AuthorWriteModel author, LocalDateTime date) {
+        author.setPassword(bCryptPasswordEncoder.encode(author.getPassword()));
         author.setDate(date);
         Author result = repository.save(author.toAuthor());
         return new AuthorReadModel(result);
+    }
+
+    public Author getAuthorByName(String name) {
+        return repository.findByName(name);
     }
 
     public List<AuthorReadModel> getAllAuthors() {

@@ -55,25 +55,4 @@ class AuthorController {
         return "author/author";
     }
 
-    @GetMapping("/add")
-    String showAddAuthorForm(Model model) {
-        model.addAttribute("author", new AuthorWriteModel());
-        return "author/author_add";
-    }
-
-    @PostMapping("/add")
-    String createBook(Model model, @ModelAttribute("author") @Valid AuthorWriteModel current, BindingResult bindingResult,
-                      @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime date) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("message" ,"Wystąpił błąd!");
-            return "author/author_add";
-        }
-
-        service.save(current, date);
-
-        model.addAttribute("message","Stworzono autora!");
-        model.addAttribute("author", new AuthorWriteModel());
-        return "author/author_add";
-    }
-
 }

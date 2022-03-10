@@ -1,6 +1,7 @@
 package me.nes0x.author;
 
 import me.nes0x.book.Book;
+import me.nes0x.comment.Comment;
 import org.hibernate.annotations.GenericGenerator;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,13 +19,13 @@ public class Author {
     @GenericGenerator(name = "inc", strategy = "increment")
     @Id
     private int id;
-    @NotBlank(message = "Name must be not empty!")
     private String name;
-    @NotBlank(message = "Surname must be not empty!")
-    private String surname;
     private LocalDateTime date;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private Set<Book> books;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Set<Comment> comments;
+    private String password;
 
 
     Author() {
@@ -46,14 +47,6 @@ public class Author {
         this.name = name;
     }
 
-    String getSurname() {
-        return surname;
-    }
-
-    void setSurname(final String surname) {
-        this.surname = surname;
-    }
-
     LocalDateTime getDate() {
         return date;
     }
@@ -68,5 +61,21 @@ public class Author {
 
     void setBooks(final Set<Book> books) {
         this.books = books;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    void setPassword(final String password) {
+        this.password = password;
+    }
+
+    Set<Comment> getComments() {
+        return comments;
+    }
+
+    void setComments(final Set<Comment> comments) {
+        this.comments = comments;
     }
 }

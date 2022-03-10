@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" th:href="@{/wzium.png}">
+    <link rel="shortcut icon" type="image/png" th:href="@{wzium.png}">
     <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm_theme_mischka.min.css">
-    <title>WziumBooks | Błąd</title>
+    <title>WziumBooks | Książki</title>
     <style>
         .Bd {
             border: solid 1px black;
-        }
-
-        .center {
-            text-align: center;
         }
 
 
@@ -36,7 +32,7 @@
 
     </style>
 </head>
-<body  th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+<body>
 
     <header>
         <h1>WziumBooks - Recenzje książek!</h1>
@@ -78,14 +74,25 @@
                 <button type="submit">Szukaj</button>
             </form>
         </nav>
+
     </header>
 
 
     <main>
-        <h1 th:text="${httpStatus}">404</h1>
-        <p>
-            <a href="/" th:href="@{/}">Wróć do strony głównej</a>
-        </p>
+
+        <h1>Witaj w panelu <span sec:authentication="name"></span></h1>
+        <h1 th:if="${message != null}" th:text="${message}"></h1>
+        <dl th:each="book : ${books}" class="Bd P(10px)">
+            <dt>
+                <a th:href="@{/books/{id}(id=${book.id})}">
+                    <p th:text="${book.title}"></p>
+                </a>
+                <form method="post" th:action="@{/books/{id}(id=${book.id})}">
+                    <button name="deleteBook" type="submit">Kliknij by usunąć</button>
+                </form>
+            </dt>
+        </dl>
+
     </main>
 </body>
 </html>

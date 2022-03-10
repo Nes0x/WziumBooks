@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,10 +28,26 @@
                 <li>
                     <a href="/authors">Autorzy</a>
                 </li>
-                <li>
+                <li sec:authorize="isAuthenticated()">
                     <a href="/books/add">Dodaj książkę</a>
                 </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/login">Zaloguj</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/registration">Zarejestruj</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/dashboard">Panel</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" onclick="document.forms['logoutForm'].submit()">Wyloguj się</a>
+                </li>
             </ul>
+
+            <form id="logoutForm" method="post" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
 
             <form class="fix-form" action="/books" method="get">
                 <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">

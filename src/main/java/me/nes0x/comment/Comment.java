@@ -1,5 +1,6 @@
 package me.nes0x.comment;
 
+import me.nes0x.author.Author;
 import me.nes0x.book.Book;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,21 +15,22 @@ public class Comment {
     @GenericGenerator(name = "inc", strategy = "increment")
     @Id
     private int id;
-    @NotBlank(message = "Title must be not empty!")
-    private String title;
     @NotBlank(message = "Content must be not empty!")
     private String content;
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     Comment() {
     }
 
-    Comment(final String title, final String content, final Book book) {
-        this.title = title;
+    Comment(final String content, final Book book, final Author author) {
         this.content = content;
         this.book = book;
+        this.author = author;
     }
 
     int getId() {
@@ -37,14 +39,6 @@ public class Comment {
 
     void setId(final int id) {
         this.id = id;
-    }
-
-    String getTitle() {
-        return title;
-    }
-
-    void setTitle(final String title) {
-        this.title = title;
     }
 
     String getContent() {
@@ -61,5 +55,13 @@ public class Comment {
 
     void setBook(final Book book) {
         this.book = book;
+    }
+
+    Author getAuthor() {
+        return author;
+    }
+
+    void setAuthor(final Author author) {
+        this.author = author;
     }
 }

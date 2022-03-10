@@ -1,23 +1,15 @@
 package me.nes0x.comment;
 
+import me.nes0x.author.Author;
 import me.nes0x.book.Book;
 
 import javax.validation.constraints.NotBlank;
 
 public class CommentWriteModel {
-    @NotBlank(message = "Title must be not empty!")
-    private String title;
     @NotBlank(message = "Description must be not empty!")
     private String content;
     private Book book;
-
-     public String getTitle() {
-        return title;
-    }
-
-     public void setTitle(final String title) {
-        this.title = title;
-    }
+    private Author author;
 
      public String getContent() {
         return content;
@@ -35,7 +27,15 @@ public class CommentWriteModel {
         this.book = book;
     }
 
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(final Author author) {
+        this.author = author;
+    }
+
     public Comment toComment() {
-        return new Comment(title, content, book);
+        return new Comment(content, book, author);
     }
 }
