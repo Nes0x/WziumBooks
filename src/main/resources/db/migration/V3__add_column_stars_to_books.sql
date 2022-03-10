@@ -1,1 +1,0 @@
-alter table books add column stars int null;
