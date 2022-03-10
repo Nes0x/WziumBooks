@@ -69,130 +69,213 @@
             clear: both;
         }
 
+
+        .rate-area {
+            float: left;
+            border-style: none;
+            margin-left: -30px;
+        }
+
+        .rate-area:not(:checked) > input {
+            position: absolute;
+            top: -9999px;
+            clip: rect(0,0,0,0);
+        }
+
+        .rate-area:not(:checked) > label {
+            float: right;
+            width: .80em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 40px;
+            line-height: 32px;
+            color: #494848;
+            margin-bottom: 10px !important;
+        }
+
+        .rate-area:not(:checked) > label:before {
+            content: '★';
+        }
+
+        .rate-area > input:checked ~ label {
+            color: #000000;
+            text-shadow: none;
+        }
+
+        .rate-area:not(:checked) > label:hover,
+        .rate-area:not(:checked) > label:hover ~ label {
+            color: #000000;
+
+        }
+
+        .rate-area > input:checked + label:hover,
+        .rate-area > input:checked + label:hover ~ label,
+        .rate-area > input:checked ~ label:hover,
+        .rate-area > input:checked ~ label:hover ~ label,
+        .rate-area > label:hover ~ input:checked ~ label {
+            color: #000000;
+            text-shadow: none;
+
+        }
+
+        .rate-area > label:active {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        #add-comment {
+            display: flex;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>WziumBooks - Recenzje książek!</h1>
+<header>
+    <h1>WziumBooks - Recenzje książek!</h1>
 
-        <nav>
-            <ul>
-                <li>
-                    <a href="/">Strona główna</a>
-                </li>
-                <li>
-                    <a href="/books">Wszystkie książki</a>
-                </li>
-                <li>
-                    <a href="/authors">Autorzy</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="/books/add">Dodaj książkę</a>
-                </li>
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/login">Zaloguj</a>
-                </li>
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/registration">Zarejestruj</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="/dashboard">Panel</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="#" onclick="document.forms['logoutForm'].submit()">Wyloguj się</a>
-                </li>
-            </ul>
+    <nav>
+        <ul>
+            <li>
+                <a href="/">Strona główna</a>
+            </li>
+            <li>
+                <a href="/books">Wszystkie książki</a>
+            </li>
+            <li>
+                <a href="/authors">Autorzy</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/books/add">Dodaj książkę</a>
+            </li>
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/login">Zaloguj</a>
+            </li>
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/registration">Zarejestruj</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/dashboard">Panel</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="#" onclick="document.forms['logoutForm'].submit()">Wyloguj się</a>
+            </li>
+        </ul>
 
-            <form id="logoutForm" method="POST" th:action="@{/logout}">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            </form>
+        <form id="logoutForm" method="post" th:action="@{/logout}">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
 
-            <form class="fix-form" action="/books" method="get">
-                <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
-                <button type="submit">Szukaj</button>
-            </form>
-        </nav>
-    </header>
+        <form class="fix-form" action="/books" method="get">
+            <input type="text" name="title" id="search" placeholder="Szukaj książki po tytule...">
+            <button type="submit">Szukaj</button>
+        </form>
+    </nav>
+</header>
 
-    <main>
-        <h1 th:if="${message != null}" th:text="${message}"></h1>
-        <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __${stars}__}">
-            <h3>Okładka</h3><br>
-            <img id="leftImage" th:src="*{image}" alt="okładka">
-            <div class="clear">
-                <h3>Tytuł</h3>
-                <p th:text="*{title}"></p>
-                <h3>Opis</h3>
-                <p th:text="*{description}"></p>
-                <h3>Gwiazdki </h3>
-                <div th:each="i : ${#numbers.sequence(1, __${stars}__, 1)}" class="stars">
-                    <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
-                </div>
-                <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
-                    <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
-                </div>
-
-
-                <div th:if="${book.author} != null">
-                    <h3>Autor</h3>
-                    <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
-                </div>
-
-                <div th:if="${book.data} != null">
-                    <br>
-                    <br>
-                    <a th:href="@{{id}/download(id=*{id})}">Kliknij by pobrać</a>
-                </div>
+<main>
+    <h1 th:if="${message != null}" th:text="${message}"></h1>
+    <fieldset th:if="${book} != null" th:object="${book}" th:with="result=${5 - __${stars}__}">
+        <h3>Okładka</h3><br>
+        <img id="leftImage" th:src="*{image}" alt="okładka">
+        <div class="clear">
+            <h3>Tytuł</h3>
+            <p th:text="*{title}"></p>
+            <h3>Opis</h3>
+            <p th:text="*{description}"></p>
+            <h3>Gwiazdki </h3>
+            <div th:each="i : ${#numbers.sequence(1, __${stars}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
             </div>
-        </fieldset>
+            <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
+            </div>
 
-    </main>
+
+            <div th:if="${book.author} != null">
+                <h3>Autor</h3>
+                <a th:href="@{/authors/{id}(id=${book.author.id})}" th:text="${book.author.name}"></a>
+            </div>
+
+            <div th:if="${book.data} != null">
+                <br>
+                <br>
+                <a th:href="@{{id}/download(id=*{id})}">Kliknij by pobrać</a>
+            </div>
+        </div>
+    </fieldset>
+
+</main>
 
 
-    <footer th:if="${book} != null">
-        <h1>Napisz komentarz</h1>
+<footer th:if="${book} != null">
+    <h1>Napisz komentarz</h1>
 
-        <fieldset>
-            <form th:object="${comment}" class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
-                <label>Treść
-                    <input required type="text" th:field="*{content}" />
-                </label>
-                <label>Ocena
-                    <input required type="number" min="1" max="5" th:field="*{stars}" />
-                </label>
-                <button type="submit">Dodaj</button>
-            </form>
-        </fieldset>
+    <fieldset>
+        <form th:object="${comment}" class="fix-form-special" th:action="@{/comments/add/{id}(id=${book.id})}" method="post">
+            <label class="text-left">Treść
+                <input required type="text" th:field="*{content}">
+            </label>
+            <h3 class="text-left" >Ocena</h3>
+            <div id="stars">
+                <ul class="rate-area">
+                    <input type="radio" id="5-star" th:field="*{stars}" value="5">
+                    <label for="5-star"></label>
 
+                    <input type="radio" id="4-star" th:field="*{stars}" value="4">
+                    <label for="4-star"></label>
+
+                    <input type="radio" id="3-star" th:field="*{stars}" value="3">
+                    <label for="3-star"></label>
+
+                    <input type="radio" id="2-star" th:field="*{stars}" value="2">
+                    <label for="2-star"></label>
+
+                    <input type="radio" id="1-star" required th:field="*{stars}" value="1" aria-required="true">
+                    <label for="1-star"></label>
+
+                </ul>
+
+            </div>
+
+            <button type="submit" id="add-comment">Dodaj</button>
+        </form>
+    </fieldset>
+
+    <br>
+    <br>
+
+    <div th:if="${comments.size != 0}">
+        <h1>Komentarze</h1>
         <br>
-        <br>
-
-        <div th:if="${comments.size != 0}">
-            <h1>Komentarze</h1>
-            <br>
-            <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)" th:with="result=${5 - __${comment.stars}__}">
-                <h1 th:text="${comment.author.name}"></h1>
-                <p th:text="${comment.content}"></p>
-                <div th:each="i : ${#numbers.sequence(1, __${comment.stars}__, 1)}" class="stars">
-                    <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
-                </div>
-                <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
-                    <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
-                </div>
-                <div sec:authorize="isAuthenticated()">
-                    <div th:if="${comment.author.name == #authentication.name}">
-                        <form class="fix-form-special" th:action="@{/comments/remove/{id}(id=${comment.id})}" method="post">
-                            <input type="hidden"  th:value="${book.id}" name="bookId" />
-                            <button type="submit">Usuń</button>
-                        </form>
-                    </div>
+        <div th:each="comment : ${comments}" class="Bd comment P(9px) M(10px)" th:with="result=${5 - __${comment.stars}__}">
+            <h1 th:text="${comment.author.name}"></h1>
+            <p th:text="${comment.content}"></p>
+            <div th:each="i : ${#numbers.sequence(1, __${comment.stars}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-filled/48/000000/star.png"/>
+            </div>
+            <div th:each="i : ${#numbers.sequence(1, __${result}__, 1)}" class="stars">
+                <img width="25px" src="https://img.icons8.com/fluency-systems-regular/48/000000/star--v1.png"/>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <div th:if="${comment.author.name == #authentication.name}">
+                    <form class="fix-form-special" th:action="@{/comments/remove/{id}(id=${comment.id})}" method="post">
+                        <input type="hidden"  th:value="${book.id}" name="bookId" />
+                        <button type="submit">Usuń</button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
 
-    </footer>
+</footer>
 
 </body>
 </html>
