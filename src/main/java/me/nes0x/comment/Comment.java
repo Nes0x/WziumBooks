@@ -35,7 +35,7 @@ public class Comment {
         this.stars = stars;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 

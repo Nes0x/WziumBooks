@@ -148,11 +148,13 @@ class BookController {
             return "redirect:/";
         }
 
-        if (bookRepository.findByAuthor_Name(principal.getName()).contains(bookRepository.findById(id).get())) {
-            bookRepository.deleteById(id);
-            model.addAttribute("message", "Pomyślnie usunałeś swoją ksiażke!");
-        }
+        boolean isDeleted = service.deleteBook(id, principal.getName());
 
+        if (isDeleted) {
+            model.addAttribute("message", "Pomyślnie usunałeś swoją ksiażke!");
+        } else {
+            model.addAttribute("message", "Coś poszło nie tak!");
+        }
 
         model.addAttribute("books", service.getBooksByAuthorName(principal.getName()));
         return "security/dashboard";

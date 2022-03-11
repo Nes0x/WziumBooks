@@ -1,8 +1,7 @@
 package me.nes0x.book;
 
 import me.nes0x.author.AuthorRepository;
-import me.nes0x.comment.Comment;
-import me.nes0x.comment.CommentReadModel;
+import me.nes0x.comment.CommentService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,10 +13,12 @@ import java.util.stream.Collectors;
 public class BookService {
     private final BookRepository repository;
     private final AuthorRepository authorRepository;
+    private final CommentService commentService;
 
-    BookService(final BookRepository repository, final AuthorRepository authorRepository) {
+    BookService(final BookRepository repository, final AuthorRepository authorRepository, final CommentService commentService) {
         this.repository = repository;
         this.authorRepository = authorRepository;
+        this.commentService = commentService;
     }
 
     public BookReadModel save(BookWriteModel book, MultipartFile file, String name) throws IOException {
@@ -52,6 +53,16 @@ public class BookService {
                 .stream()
                 .map(BookReadModel::new)
                 .collect(Collectors.toList());
+    }
+
+    public boolean deleteBook(int id, String name) {
+        Book book = repository.findById(id).get();
+        if (repository.findByAuthor_Name(name).contains(book)) {
+            book.getComments().forEach(comment -> commentService.delete(comment.getId()));
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }
